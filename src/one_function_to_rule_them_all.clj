@@ -18,18 +18,6 @@
 (defn my-reverse [a-seq]
   (reduce (fn [a b] (cons b a)) [] a-seq))
 
-(defn min-max-element2 [a-seq]
-  (let [minmax (fn minmax [seq min max]
-                 (if (empty? seq)
-                   [min max]
-                   (if (< (first seq) min)
-                     (minmax (rest seq) (first seq) max)
-                     (if (> (first seq) max)
-                       (minmax (rest seq) min (first seq))
-                       (minmax (rest seq) min max))                   
-                     )))]
-    (minmax a-seq (first a-seq) (first a-seq))))
-
 (defn min-max-element [a-seq]
   (let [minmax (fn [[min max] elem]
                  (cond 
@@ -57,17 +45,32 @@
          )]
   (reduce party (set a-seq) a-seq)))
 
-(defn minus [x]
-  :-)
+(defn minus 
+  ([x] (* -1 x))
+  ([x y] (- x y))
+  )
 
-(defn count-params [x]
-  :-)
+(defn count-params [& x]
+  (let [counter (fn [count elem]
+                  (inc count))]
+    (reduce counter 0 x)))
 
-(defn my-* [x]
-  :-)
+(defn my-* 
+  ([] 1)
+  ([x] x)
+  ([x y] (* x y))
+  ([x y & more]
+   (reduce * (* x y) more))
+  )
 
-(defn pred-and [x]
-  (fn [x] :-))
+(defn pred-and
+  ([] (fn [x] true))
+  ([x] (fn [x] x))
+  ([p y] (fn [x] (and (p x) (y x))))
+  ([p y & more]
+   (fn [x] (reduce 
+            (fn [val pred]
+              (and (pred x) val)) (and (p x) (y x)) more))))
 
 (defn my-map [f a-seq]
   [:-])
